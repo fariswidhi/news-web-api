@@ -9,6 +9,8 @@ class CategoryController extends Controller
 {
 
     private $page = 'category';
+    private $success = 'Success';
+    private $failed = 'failed';
     /**
      * Display a listing of the resource.
      *
@@ -17,8 +19,8 @@ class CategoryController extends Controller
     public function index()
     {
         //
-
-        return view($this->page.'/index');
+        $data = Obj::paginate(10);
+        return view($this->page.'/index',compact('data'));
     }
 
     /**
@@ -43,9 +45,12 @@ class CategoryController extends Controller
         //
         $obj = new Obj;
         $obj->category = $request->category;
-        $obj->save();
+        $save = $obj->save();
 
-        return redirect()->back()->with('status','success');
+        if (!$save) {
+            return redirect()->back()->with('status',$this->failed);
+        }
+        return redirect()->back()->with('status',$this->success);
 
     }
 
@@ -69,6 +74,8 @@ class CategoryController extends Controller
     public function edit($id)
     {
         //
+        $data = Obj::find($id);
+        return view($this->page.'/edit',compact('data'));
     }
 
     /**
@@ -81,6 +88,16 @@ class CategoryController extends Controller
     public function update(Request $request, $id)
     {
         //
+
+        $obj = Obj::find($id);
+        $obj->category = $request->category;
+        $save = $obj->save();
+
+        if (!$save) {
+            return redirect()->back()->with('status',$this->failed);
+        }
+        return redirect()->back()->with('status',$this->success);
+
     }
 
     /**
@@ -92,5 +109,11 @@ class CategoryController extends Controller
     public function destroy($id)
     {
         //
+        $obj = Obj::find($id);
+        $delete = $obj->delete();
+                if (!$save) {
+            return redirect()->back()->with('status',$this->failed);
+        }
+        return redirect()->back()->with('status',$this->success);
     }
 }
