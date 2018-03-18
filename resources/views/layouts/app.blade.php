@@ -12,6 +12,9 @@
 
     <!-- Styles -->
     <link href="{{ asset('css/app.css') }}" rel="stylesheet">
+
+<script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script> 
+
 </head>
 <body>
     <div id="app">
@@ -51,7 +54,7 @@
                                 <a href="{{ url('/articles') }}">Article</a>
                             </li>
                             <li>
-                                <a href="{{ url('/categories') }}">Category</a>
+                                <a href="{{ url('/category') }}">Category</a>
                             </li>
                             <li class="dropdown">
                                 <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false" aria-haspopup="true" v-pre>
@@ -77,11 +80,17 @@
                 </div>
             </div>
         </nav>
-
         @yield('content')
     </div>
 
     <!-- Scripts -->
     <script src="{{ asset('js/app.js') }}"></script>
+
+<!-- include summernote css/js -->
+<link href="http://cdnjs.cloudflare.com/ajax/libs/summernote/0.8.9/summernote.css" rel="stylesheet">
+<script src="http://cdnjs.cloudflare.com/ajax/libs/summernote/0.8.9/summernote.js"></script>
+
+    @stack('script')
+
 </body>
 </html>

@@ -3,9 +3,13 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-
+use App\Article as Obj;
+use App\Category;
 class ArticleController extends Controller
 {
+    private $page = 'articles';
+    private $success = 'Success';
+    private $failed = 'failed';
     /**
      * Display a listing of the resource.
      *
@@ -14,6 +18,9 @@ class ArticleController extends Controller
     public function index()
     {
         //
+        $data = Obj::paginate(10);
+        $no =1;
+        return view($this->page.'/index',compact('data','no'));
     }
 
     /**
@@ -24,6 +31,8 @@ class ArticleController extends Controller
     public function create()
     {
         //
+        $categories = Category::all();
+        return view($this->page.'/create',compact('categories'));
     }
 
     /**
@@ -35,6 +44,25 @@ class ArticleController extends Controller
     public function store(Request $request)
     {
         //
+
+        $extension = $request->photo->getClientOriginalExtension();
+        $photo = time().'.'.$extension;
+        $request->file('photo')->move("uploads/",$photo);
+
+
+        $obj = new Obj;
+        $obj->title = $request->title;
+        $obj->slug = str_slug($request->title,'-').'-'.time();
+        $obj->photo = $photo;
+        $obj->content = $request->content;
+        $obj->category_id = $request->category;
+        $save = $obj->save();
+
+        if (!$save) {
+            return redirect()->with('failed',$this->failed)->withInput();
+        }
+        return redirect($this->page)->with('success',$this->success);
+
     }
 
     /**
@@ -46,6 +74,9 @@ class ArticleController extends Controller
     public function show($id)
     {
         //
+        $data = Obj::find($id);
+
+        return view($this->page.'/detail',compact('data'));
     }
 
     /**
@@ -57,6 +88,9 @@ class ArticleController extends Controller
     public function edit($id)
     {
         //
+        $data = Obj::find($id);
+        $categories = Category::all();
+        return view($this->page.'/edit',compact('data','categories'));
     }
 
     /**
@@ -69,6 +103,29 @@ class ArticleController extends Controller
     public function update(Request $request, $id)
     {
         //
+
+    
+
+
+        $obj = Obj::find($id);
+        $obj->title = $request->title;
+        $obj->slug = str_slug($request->title,'-').'-'.time();
+        if (!is_null($request->photo)) {
+
+        $extension = $request->photo->getClientOriginalExtension();
+        $photo = time().'.'.$extension;
+        $request->file('photo')->move("uploads/",$photo);
+        $obj->photo = $photo;
+        }
+        $obj->content = $request->content;
+        $obj->category_id = $request->category;
+        $save = $obj->save();
+
+        if (!$save) {
+            return redirect()->with('failed',$this->failed)->withInput();
+        }
+        return redirect($this->page)->with('success',$this->success);
+
     }
 
     /**
@@ -80,5 +137,11 @@ class ArticleController extends Controller
     public function destroy($id)
     {
         //
+        $obj = Obj::find($id);
+        $delete = $obj->delete();
+                if (!$delete) {
+            return redirect()->back()->with('failed',$this->failed);
+        }
+        return redirect()->back()->with('success',$this->success);
     }
 }

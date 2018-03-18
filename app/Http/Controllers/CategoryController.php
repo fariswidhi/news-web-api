@@ -20,7 +20,8 @@ class CategoryController extends Controller
     {
         //
         $data = Obj::paginate(10);
-        return view($this->page.'/index',compact('data'));
+        $no =1;
+        return view($this->page.'/index',compact('data','no'));
     }
 
     /**
@@ -45,12 +46,13 @@ class CategoryController extends Controller
         //
         $obj = new Obj;
         $obj->category = $request->category;
+        $obj->slug = str_slug($request->category,'-').'-'.time();
         $save = $obj->save();
 
         if (!$save) {
-            return redirect()->back()->with('status',$this->failed);
+            return redirect()->with('failed',$this->failed)->withInput();
         }
-        return redirect()->back()->with('status',$this->success);
+        return redirect($this->page)->with('success',$this->success);
 
     }
 
@@ -90,13 +92,13 @@ class CategoryController extends Controller
         //
 
         $obj = Obj::find($id);
-        $obj->category = $request->category;
+        $obj->category = str_slug($request->category,'-').'-'.time();
         $save = $obj->save();
 
         if (!$save) {
-            return redirect()->back()->with('status',$this->failed);
+            return redirect()->back()->with('failed',$this->failed);
         }
-        return redirect()->back()->with('status',$this->success);
+        return redirect($this->page)->with('success',$this->success);
 
     }
 
@@ -111,9 +113,9 @@ class CategoryController extends Controller
         //
         $obj = Obj::find($id);
         $delete = $obj->delete();
-                if (!$save) {
-            return redirect()->back()->with('status',$this->failed);
+                if (!$delete) {
+            return redirect()->back()->with('failed',$this->failed);
         }
-        return redirect()->back()->with('status',$this->success);
+        return redirect()->back()->with('success',$this->success);
     }
 }

@@ -5,7 +5,7 @@
     <div class="row">
         <div class="col-md-8 col-md-offset-2">
             <div class="panel panel-default">
-                <div class="panel-heading">Category</div>
+                <div class="panel-heading">Article</div>
 
                 <div class="panel-body">
 
@@ -20,21 +20,23 @@
     @endcomponent
     @endif
 
-    <a href="{{ url('/category/create') }}" class="btn btn-primary">Create</a>
+    <a href="{{ url('/articles/create') }}" class="btn btn-primary">Create</a>
                     <table class="table table-striped">
                         <thead>
                             <th>#</th>
-                            <th>Category</th>
+                            <th>Title</th>
                             <th>Actions</th>
                         </thead>
                         <tbody>
                             @foreach ($data as $d)
                                 <tr>
                                     <td>{{$no++}}</td>
-                                    <td>{{$d->category}}</td>
+                                    <td>{{$d->title}}</td>
                                     <td>
-                                        <a href="{{ url('/category/'.$d->id.'/edit') }}" class="btn btn-success">Edit</a>
-                                        <form action="{{ url('/category/'.$d->id) }}" method="post" style="display: inline;">
+
+                                        <a href="{{ url('/articles/'.$d->id) }}" class="btn btn-primary">Show</a>
+                                        <a href="{{ url('/articles/'.$d->id.'/edit') }}" class="btn btn-success">Edit</a>
+                                        <form action="{{ url('/articles/'.$d->id) }}" method="post" style="display: inline;">
                                             {{csrf_field()}}
                                             {{method_field('DELETE')}}
                                             <button type="submit" class="btn btn-danger">Delete</button>
@@ -44,9 +46,9 @@
                             @endforeach
                         </tbody>
                     </table>
-    <center>
-                                                {{$data->links()}}
-    </center>
+                    <center>
+                    {{$data->links()}}
+                    </center>
                 </div>
             </div>
         </div>
