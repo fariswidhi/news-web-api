@@ -12,7 +12,7 @@
                     {{csrf_field()}}
                     {{method_field('PUT')}}
                     <div class="row">
-                        <div class="col-lg-6">
+                        <div class="col-lg-12">
                             
                         <div class="form-group">
                     
@@ -25,7 +25,7 @@
                             </div>
                             <div class="form-group">
                             <label>Content</label>
-                            <textarea class="form-control" name="content">{{$data->content}}</textarea>
+                            <textarea id="summernote" class="form-control" name="content">{{$data->content}}</textarea>
                             </div>
                             <div class="form-group">
                             <label>
@@ -53,3 +53,24 @@
     </div>
 </div>
 @endsection
+
+
+
+@push('script')
+    {{-- expr --}}
+<script type="text/javascript">
+    $(document).ready(function() {
+  $('#summernote').summernote({
+     toolbar: [
+    // [groupName, [list of button]]
+    ['style', ['bold', 'italic', 'underline', 'clear']],
+    ['font', ['strikethrough', 'superscript', 'subscript']],
+    ['fontsize', ['fontsize']],
+    ['color', ['color']],
+    ['para', ['ul', 'ol', 'paragraph']],
+    ['height', ['height']]
+  ]
+  });
+});
+</script>
+@endpush

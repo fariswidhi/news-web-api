@@ -28,11 +28,18 @@
                             <th>Actions</th>
                         </thead>
                         <tbody>
+                            @if (count($data)==null)
+                            {{-- expr --}}
+                            <tr>
+                                <td colspan="3"><center>Data Not Found</center></td>
+                            </tr>
+                            @else
                             @foreach ($data as $d)
                                 <tr>
                                     <td>{{$no++}}</td>
                                     <td>{{$d->category}}</td>
                                     <td>
+                                        <a href="{{ url('/category/'.$d->id) }}" class="btn btn-primary">Detail</a>
                                         <a href="{{ url('/category/'.$d->id.'/edit') }}" class="btn btn-success">Edit</a>
                                         <form action="{{ url('/category/'.$d->id) }}" method="post" style="display: inline;">
                                             {{csrf_field()}}
@@ -42,6 +49,7 @@
                                     </td>
                                 </tr>
                             @endforeach
+                            @endif
                         </tbody>
                     </table>
     <center>

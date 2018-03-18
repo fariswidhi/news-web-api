@@ -5,7 +5,7 @@
     <div class="row">
         <div class="col-md-8 col-md-offset-2">
             <div class="panel panel-default">
-                <div class="panel-heading">Article</div>
+                <div class="panel-heading">{{Request::segment(2)==null ? 'Article':$category->category}}</div>
 
                 <div class="panel-body">
 
@@ -28,6 +28,12 @@
                             <th>Actions</th>
                         </thead>
                         <tbody>
+                        @if (count($data)==null)
+                        	{{-- expr --}}
+                        	<tr>
+                        		<td colspan="3"><center>Data Not Found</center></td>
+                        	</tr>
+                        	@else
                             @foreach ($data as $d)
                                 <tr>
                                     <td>{{$no++}}</td>
@@ -44,6 +50,7 @@
                                     </td>
                                 </tr>
                             @endforeach
+                        @endif
                         </tbody>
                     </table>
                     <center>

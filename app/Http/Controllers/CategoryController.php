@@ -4,7 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Category as Obj;
-
+use App\Article;
 class CategoryController extends Controller
 {
 
@@ -65,6 +65,10 @@ class CategoryController extends Controller
     public function show($id)
     {
         //
+        $data = Article::where('category_id',$id)->paginate(10);
+        $no =1;
+        $category = Obj::find($id);
+        return view('articles/index',compact('data','no','category'));
     }
 
     /**
